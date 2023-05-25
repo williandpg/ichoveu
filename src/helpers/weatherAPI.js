@@ -12,6 +12,23 @@ export const searchCities = async (term) => {
   return data;
 };
 
-export const getWeatherByCity = (/* cityURL */) => {
+export const getWeatherByCity = (cityURL) => {
   //   seu código aqui
+  try {
+    const TOKEN = import.meta.env.VITE_TOKEN;
+    const response = fetch(`http://api.weatherapi.com/v1/forecast.json?lang=pt&key=${TOKEN}&q=${cityURL}`);
+    const data = response.json();
+    const {
+      temp: temperature,
+      condition: { text: conditionText, icon: conditionIcon },
+    } = data.current;
+    return {
+      temperature,
+      conditionText,
+      conditionIcon,
+    };
+  } catch (error) {
+    console.error('Ocorreu um erro ao obter as infos do tempo para as cidades:', error);
+    return null;
+  }
 };
